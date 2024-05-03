@@ -1,4 +1,6 @@
 <?php
+
+//https://www.nobochamp.de/hauptstaedte.html von hier die koordinaten der europäischen hauptsätde extrahieren
 $urls = [
     "Data Set Bern" => "https://api.sunrise-sunset.org/json?lat=46.948090&lng=7.447440",
     "Data Set Oslo" => "https://api.sunrise-sunset.org/json?lat=59.912731&lng=10.746090"

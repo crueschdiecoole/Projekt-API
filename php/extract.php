@@ -3,7 +3,7 @@
 // Initialize cURL session
 $ch = curl_init();
 
-// Set the URL of the API endpoint
+// Set the URL of the API endpoint.
 $url = "https://api.sunrise-sunset.org/json?lat=46.948090&lng=7.447440";
 
 

@@ -1,45 +1,35 @@
 <?php
 
-// Initialize cURL session
-$ch = curl_init();
+//https://www.nobochamp.de/hauptstaedte.html von hier die koordinaten der europäischen hauptsätde extrahieren
+$urls = [
+    "Data Set Bern" => "https://api.sunrise-sunset.org/json?lat=46.948090&lng=7.447440",
+    "Data Set Oslo" => "https://api.sunrise-sunset.org/json?lat=59.912731&lng=10.746090"
+];
 
-// Set the URL of the API endpoint.
-$url = "https://api.sunrise-sunset.org/json?lat=46.948090&lng=7.447440";
+// Loop through each URL
+foreach ($urls as $name => $url) {
+    // Fetch data from the current URL
+    $data = file_get_contents($url);
 
+    // Check if data was fetched successfully
+    if ($data !== false) {
+        // Parse the JSON data into an associative array
+        $data_array = json_decode($data, true);
 
-
-// Set cURL options
-curl_setopt($ch, CURLOPT_URL, $url); //Set URL to fetch
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return the transfer as a string
-
-// Execute cURL request and get the response
-$response = curl_exec($ch); // Execute cURL session, fetch the JSON respone
-
-// Check for errors
-if(curl_errno($ch)){
-    // If there is an error, handle it here
-    echo 'Error: ' . curl_error($ch);
+        // Display the data along with the assigned name
+        echo "<h2>Data from $name:</h2>";
+        print_r($data_array); // Or you can format it as per your requirement
+        echo "<br><br>";
+    } 
+    else {
+        // Display an error message if data fetching fails
+        echo "Error fetching data from $name ($url)<br><br>";
+    }
 }
-
-// Close cURL session
-curl_close($ch);
-
-// Decode JSON response
-$sunData = json_decode($response, true);
-
-// Accessing the 'results' array
-$results = $sunData['results'];
-extractData($results);
-print_r($results);
-
-
-function extractData(&$data) {
-    $data = [
-        'sunrise' => $data['sunrise'],
-        'sunset' => $data['sunset'],
-        'day_length' => $data['day_length'],
-        'solar_noon' => $data['solar_noon'],
-    ];
-}
-
 ?>
+
+
+
+
+
+

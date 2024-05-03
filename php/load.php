@@ -30,3 +30,6 @@ $item = $results; // Assuming $results contains the array of data
     } else {
         echo "Fehler beim Einfügen des Eintrags für '{$item['sunrise']}'.\n";
     }
+
+?>
+

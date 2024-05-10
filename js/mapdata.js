@@ -1,4 +1,4 @@
-var simplemaps_europemap_mapdata={
+var simplemaps_europemap_mapdata ={
     main_settings: {
      //General settings
       width: "responsive", //'700' or 'responsive'
@@ -22,7 +22,7 @@ var simplemaps_europemap_mapdata={
       location_url: "",
       location_size: "12",
       location_type: "circle",
-      location_image_source: "frog.png",
+      location_image_source: "../map_images/frog.png",
       location_border_color: "#FFFFFF",
       location_border: 2,
       location_hover_border: 2.5,

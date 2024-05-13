@@ -129,5 +129,6 @@ $items = $data_array['results'];
   } 
 } // repeat immer nur 2 urls eingefügt
 
+
 ?>
 

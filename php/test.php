@@ -3,11 +3,31 @@
 
 require_once 'transform.php';
 require_once '../config/config.php';
+require_once '../php/europamap.php';
 
 $urls = [
     "Bern" => "https://api.sunrise-sunset.org/json?lat=46.948090&lng=7.447440",
     "Oslo" => "https://api.sunrise-sunset.org/json?lat=59.912731&lng=10.746090"
 ];
+
+// Function to extract data from HTML content using DOMDocument
+function extractDataFromHTML($html_content) {
+    $data = array();
+
+    // Create a DOMDocument object
+    $dom = new DOMDocument();
+    // Load HTML content
+    $dom->loadHTML($html_content);
+
+    // Here you would write your code to extract specific data from the HTML content
+    // For example, to extract the title:
+    $data['title'] = $dom->getElementsByTagName('title')->item(0)->nodeValue;
+
+    // You can add more code to extract other elements as needed
+
+    return $data;
+}
+
 // Loop through each URL
 foreach ($urls as $name => $url) {
     // Fetch data from the current URL
@@ -18,54 +38,24 @@ foreach ($urls as $name => $url) {
         // Parse the JSON data into an associative array
         $data_array = json_decode($data, true);
         
-
         // Display the data along with the assigned name
         echo "<h2>Data from $name:</h2>";
         print_r($data_array); 
         echo "<br><br>";
-    }
 
-    else {
+        // Extract data from the HTML file
+        $html_content = file_get_contents('../html/test.html');
+        $extracted_data = extractDataFromHTML($html_content);
+        
+        // Display the extracted data
+        echo "<h3>Extracted Data from HTML:</h3>";
+        print_r($extracted_data);
+        echo "<br><br>";
+    } else {
         // Display an error message if data fetching fails
         echo "Error fetching data from $name ($url)<br><br>";
     }
 
-//LOAD
-
-// Connect to the database
-try {
-    $pdo = new PDO($dsn, $db_user, $db_pass, $options);
-} catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+    // LOAD section and database operations...
 }
-
-$sql = "INSERT INTO sunrise_sunset_data (sunrise, sunset, solar_noon, day_length) 
-        VALUES (:sunrise, :sunset, :solar_noon, :day_length)";
-
-// Prepare the statement
-$stmt = $pdo->prepare($sql);
-
-$items = $data_array['results']; 
-
-    $stmt->bindValue(':sunrise', $items['sunrise']);
-    $stmt->bindValue(':sunset', $items['sunset']);
-    $stmt->bindValue(':solar_noon', $items['solar_noon']);
-    $stmt->bindValue(':day_length', $items['day_length']); 
-    
-
-
-
-
-    if ($stmt->execute()) {
-        echo "Eintrag für '{$items['sunrise']}' wurde erfolgreich eingefügt.\n";
-        echo "Eintrag für '{$items['sunset']}' wurde erfolgreich eingefügt.\n";
-
-    } else {
-       echo "Fehler beim Einfügen des Eintrags für '{$items['sunrise']}'.\n";
-  } 
-} // repeat immer nur 2 urls eingefügt
-
-// Include the HTML file
-include '../html/test.html';
-
 ?>

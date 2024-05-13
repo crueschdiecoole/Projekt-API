@@ -3,7 +3,7 @@
 
 require_once 'transform.php';
 require_once '../config/config.php';
-require_once '../php/europamap.php';
+require_once '../php/try.php';
 
 $urls = [
     "Bern" => "https://api.sunrise-sunset.org/json?lat=46.948090&lng=7.447440",

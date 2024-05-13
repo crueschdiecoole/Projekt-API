@@ -6,7 +6,7 @@ require_once '../config/config.php';
 
 $urls = [
     // UTC +3.00 H (Eastern European Time Zone, Year Round)
-        "Minsk" => "https://api.sunrise-sunset.org/json?lat=53.9&lng=27.5667",
+        "Minsk" => "https://api.sunrise-sunset.org/json?lat=53.9&lng=27.5667", 
     
     // UTC +3.00 H (Eastern European Time Zone, EET)
         "Helsinki" => "https://api.sunrise-sunset.org/json?lat=60.1699&lng=24.9384",

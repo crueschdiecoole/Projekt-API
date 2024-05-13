@@ -67,4 +67,5 @@ $items = $data_array['results'];
 
 // Include the HTML file
 include '../html/test.html';
+
 ?>

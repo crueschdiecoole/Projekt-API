@@ -1,46 +1,46 @@
 // Define an array of country IDs and their corresponding path IDs
 var countries = [
-    { id: "switzerland", pathId: "switzerland-path" },
-    { id: "island", pathId: "island-path" },
-    { id: "uk", pathId: "uk-path" },
-    { id: "irland", pathId: "irland-path" },
-    { id: "norway", pathId: "norway-path" },
-    { id: "sweden", pathId: "sweden-path" },
-    { id: "finland", pathId: "finland-path" },
-    { id: "france", pathId: "france-path" },
-    { id: "portugal", pathId: "portugal-path" },
-    { id: "spain", pathId: "spain-path" },
-    { id: "italy", pathId: "italy-path" },
-    { id: "belgium", pathId: "belgium-path" },
-    { id: "thenetherlands", pathId: "thenetherlands-path" },
-    { id: "luxembourg", pathId: "luxembourg-path" },
-    { id: "germany", pathId: "germany-path" },
-    { id: "denmark", pathId: "denmark-path" },
-    { id: "croatia", pathId: "croatia-path" },
-    { id: "hungary", pathId: "hungary-path" },
-    { id: "albania", pathId: "albania-path" },
-    { id: "poland", pathId: "poland-path" },
-    { id: "belarus", pathId: "belarus-path" },
-    { id: "greece", pathId: "greece-path" },
-    { id: "estonia", pathId: "estonia-path" },
-    { id: "latvia", pathId: "latvia-path" },
-    { id: "lithuania", pathId: "lithuania-path" },
-    { id: "ukraine", pathId: "ukraine-path" },
-    { id: "czechrepublic", pathId: "czechrepublic-path" },
-    { id: "slovakia", pathId: "slovakia-path" },
-    { id: "moldova", pathId: "moldova-path" },
-    { id: "romania", pathId: "romania-path" },
-    { id: "bulgaria", pathId: "bulgaria-path" },
-    { id: "turkey", pathId: "turkey-path" },
-    { id: "macedonia", pathId: "macedonia-path" },
-    { id: "bosniaandherzegovina", pathId: "bosniaandherzegovina-path" },
-    { id: "montenegro", pathId: "montenegro-path" },
-    { id: "serbia", pathId: "serbia-path" },
-    { id: "kosovo", pathId: "kosovo-path" },
-    { id: "slovenia", pathId: "slovenia-path" },
+    { id: "Berne", pathId: "switzerland-path" },
+    { id: "Reykjavik", pathId: "island-path" },
+    { id: "London", pathId: "uk-path" },
+    { id: "Dublin", pathId: "irland-path" },
+    { id: "Oslo", pathId: "norway-path" },
+    { id: "Stockholm", pathId: "sweden-path" },
+    { id: "Helsinki", pathId: "finland-path" },
+    { id: "Paris", pathId: "france-path" },
+    { id: "Lisbon", pathId: "portugal-path" },
+    { id: "Madrid", pathId: "spain-path" },
+    { id: "Rome", pathId: "italy-path" },
+    { id: "Brussels", pathId: "belgium-path" },
+    { id: "Amsterdam", pathId: "thenetherlands-path" },
+    { id: "Luxembourg", pathId: "luxembourg-path" },
+    { id: "Berlin", pathId: "germany-path" },
+    { id: "Copenhagen", pathId: "denmark-path" },
+    { id: "Zagreb", pathId: "croatia-path" },
+    { id: "Budapest", pathId: "hungary-path" },
+    { id: "Tirane", pathId: "albania-path" },
+    { id: "Warsaw", pathId: "poland-path" },
+    { id: "Minsk", pathId: "belarus-path" },
+    { id: "Athens", pathId: "greece-path" },
+    { id: "Tallinn", pathId: "estonia-path" },
+    { id: "Riga", pathId: "latvia-path" },
+    { id: "Vilnius", pathId: "lithuania-path" },
+    { id: "Kiev", pathId: "ukraine-path" },
+    { id: "Prague", pathId: "czechrepublic-path" },
+    { id: "Bratislava", pathId: "slovakia-path" },
+    { id: "Chisinau", pathId: "moldova-path" },
+    { id: "Bucharest", pathId: "romania-path" },
+    { id: "Sofia", pathId: "bulgaria-path" },
+    { id: "Ankara", pathId: "turkey-path" },
+    { id: "Skopje", pathId: "macedonia-path" },
+    { id: "Sarajevo", pathId: "bosniaandherzegovina-path" },
+    { id: "Podgorica", pathId: "montenegro-path" },
+    { id: "Belgrade", pathId: "serbia-path" },
+    { id: "Pristina", pathId: "kosovo-path" },
+    { id: "Ljubljana", pathId: "slovenia-path" },
+    { id: "Vienna", pathId: "austria-path" },
 
 ];
-
 // Loop through the countries array and attach event listeners
 countries.forEach(function(country) {
     // Add click event listener
@@ -59,23 +59,40 @@ countries.forEach(function(country) {
     });
 });
 
-
 // Define a function to handle click events on SVG paths
 function handleClick(countryId) {
     console.log('Clicked on country:', countryId);
 
-    // Send an AJAX request to load.php with the clicked country's ID
+    // Send an AJAX request to get_data.php with the clicked country's ID
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
-                // Display the fetched data on the webpage
-                document.getElementById("dataOutput").innerHTML = xhr.responseText;
+                // Parse the JSON response
+                var responseData = JSON.parse(xhr.responseText);
+                
+                // Update the HTML content with the received data
+                if (responseData.error) {
+                    document.getElementById("dataOutput").innerHTML = "<p>Error: " + responseData.error + "</p>";
+                } else {
+                    // Construct an HTML table to display the data
+                    var tableHTML = "<table>";
+                    tableHTML += "<tr><th>Attribute</th><th>Value</th></tr>";
+                    tableHTML += "<tr><td>Location</td><td>" + responseData.location + "</td></tr>";
+                    tableHTML += "<tr><td>Sunrise</td><td>" + responseData.sunrise + "</td></tr>";
+                    tableHTML += "<tr><td>Sunset</td><td>" + responseData.sunset + "</td></tr>";
+                    tableHTML += "<tr><td>Solar Noon</td><td>" + responseData.solar_noon + "</td></tr>";
+                    tableHTML += "<tr><td>Day Length</td><td>" + responseData.day_length + "</td></tr>";
+                    tableHTML += "</table>";
+
+                    // Set the HTML content to the constructed table
+                    document.getElementById("dataOutput").innerHTML = tableHTML;
+                }
             } else {
                 console.error('Error fetching data:', xhr.statusText);
             }
         }
     };
-    xhr.open("GET", "load.php?country=" + countryId, true);
+    xhr.open("GET", "test.php?country=" + countryId, true);
     xhr.send();
 }

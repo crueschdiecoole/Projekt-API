@@ -3,7 +3,7 @@
 
 require_once 'transform.php';
 require_once '../config/config.php';
-require_once '../php/try.php';
+require_once '../php/europemap.php';
 
 ?>
 

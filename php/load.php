@@ -3,16 +3,15 @@
 
 require_once 'transform.php';
 require_once '../config/config.php';
-require_once '../php/try.php';
+require_once '../php/europamap.php';
 
 $urls = [
     // UTC +3.00 H (Eastern European Time Zone, Year Round)
-    
         "Minsk" => "https://api.sunrise-sunset.org/json?lat=53.900600&lng=27.558971&" , 
     
     // UTC +3.00 H (Eastern European Time Zone, EET)    
         "Helsinki" => "https://api.sunrise-sunset.org/json?lat=60.1709&lng=24.9375",
-       /* "Tallinn" => "https://api.sunrise-sunset.org/json?lat=59.4369&lng=24.7530",
+        "Tallinn" => "https://api.sunrise-sunset.org/json?lat=59.4369&lng=24.7530",
         "Riga" => "https://api.sunrise-sunset.org/json?lat=56.9496&lng=24.1052",
         "Vilnius" => "https://api.sunrise-sunset.org/json?lat=54.6897&lng=25.2799",
         "Kiew" => "https://api.sunrise-sunset.org/json?lat=50.4501&lng=30.5234",
@@ -62,40 +61,8 @@ $urls = [
         "Lissabon" => "https://api.sunrise-sunset.org/json?lat=38.7167&lng=-9.1333",
         "London" => "https://api.sunrise-sunset.org/json?lat=51.5085&lng=-0.1257",
     
-    */
     
 ];
-// Define an array to store latitude and longitude values
-$latitudes = array();
-$longitudes = array();
-
-// Loop through each URL to extract latitude and longitude
-foreach ($urls as $name => $url) {
-    // Parse the URL to extract query parameters
-    $url_components = parse_url($url);
-    if ($url_components && isset($url_components['query'])) {
-        // Parse the query string into an associative array
-        parse_str($url_components['query'], $query_params);
-
-        // Check if latitude and longitude parameters exist in the query
-        if (isset($query_params['lat']) && isset($query_params['lng'])) {
-            // Extract latitude and longitude values
-            $latitudes[$name] = $query_params['lat'];
-            $longitudes[$name] = $query_params['lng'];
-        }
-    }
-}
-
-// Now $latitudes and $longitudes arrays contain latitude and longitude values for each city
-
-// Define the timezones for each city
-$cityTimezones = array(
-    "Minsk" => "Europe/Minsk",
-    "Helsinki" => "Europe/Helsinki",
-
-    // Add more cities with their respective timezones here
-);
-
 // Connect to the database
 try {
     $pdo = new PDO($dsn, $db_user, $db_pass, $options);
@@ -103,54 +70,47 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
-// Loop through each city and fetch data
-foreach ($urls as $name => $url) {
-    // Fetch latitude and longitude for the current city
-    $latitude = $latitudes[$name];
-    $longitude = $longitudes[$name];
+// Define the SQL statement for database insertion
+$sql = "INSERT INTO sunrise_sunset_data (sunrise, sunset, solar_noon, day_length, location) 
+        VALUES (:sunrise, :sunset, :solar_noon, :day_length, :location)";
 
-    // Fetch data from the URL corresponding to the city
+// Loop through each URL
+foreach ($urls as $name => $url) {
+    // Fetch data from the current URL
     $data = file_get_contents($url);
 
     // Check if data was fetched successfully
     if ($data !== false) {
         // Parse the JSON data into an associative array
         $data_array = json_decode($data, true);
-
-        // Fetch the timezone for the current city
-        $timezone = $cityTimezones[$name];
-
-        // Process data and set timezone accordingly
-        $results = $data_array['results'];
-        $sunrise = new DateTime($results['sunrise']);
-        $sunset = new DateTime($results['sunset']);
-        $solar_noon = new DateTime($results['solar_noon']);
-
-        $sunrise->setTimezone(new DateTimeZone($timezone));
-        $sunset->setTimezone(new DateTimeZone($timezone));
-        $solar_noon->setTimezone(new DateTimeZone($timezone));
-
-        // Insert data into the database
-        $sql = "INSERT INTO sunrise_sunset_data (location, sunrise, sunset, solar_noon, day_length) 
-                VALUES (:location, :sunrise, :sunset, :solar_noon, :day_length)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(array(
-            ':location' => $name,
-            ':sunrise' => $sunrise->format('Y-m-d H:i:s'),
-            ':sunset' => $sunset->format('Y-m-d H:i:s'),
-            ':solar_noon' => $solar_noon->format('Y-m-d H:i:s'),
-            ':day_length' => $results['day_length']
-        ));
-
+        
+        // Display the data along with the assigned name
         echo "<h2>Data from $name:</h2>";
-        print_r($data_array);
+        print_r($data_array); 
         echo "<br><br>";
 
-        echo "Data from $name inserted successfully.\n";
+        // Prepare the statement for database insertion
+        $stmt = $pdo->prepare($sql);
+
+        // Extract the relevant data from the $data_array
+        $items = $data_array['results'];
+
+        // Bind values and execute the insertion query
+        $stmt->bindValue(':location', $name);
+        $stmt->bindValue(':sunrise', $items['sunrise']);
+        $stmt->bindValue(':sunset', $items['sunset']);
+        $stmt->bindValue(':solar_noon', $items['solar_noon']);
+        $stmt->bindValue(':day_length', $items['day_length']); 
+        
+        if ($stmt->execute()) {
+            echo "Eintrag für '{$items['sunrise']}' wurde erfolgreich eingefügt.\n";
+            echo "Eintrag für '{$items['sunset']}' wurde erfolgreich eingefügt.\n";
+        } else {
+            echo "Fehler beim Einfügen des Eintrags für '{$items['sunrise']}'.\n";
+        }
     } else {
         // Display an error message if data fetching fails
         echo "Error fetching data from $name ($url)<br><br>";
     }
 }
 ?>
-

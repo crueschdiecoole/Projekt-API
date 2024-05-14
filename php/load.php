@@ -3,7 +3,7 @@
 
 require_once 'transform.php';
 require_once '../config/config.php';
-require_once '../php/europamap.php';
+require_once '../php/europemap.php';
 
 $urls = [
     // UTC +3.00 H (Eastern European Time Zone, Year Round)

@@ -3,7 +3,7 @@
 
 require_once 'transform.php';
 require_once '../config/config.php';
-require_once '../php/try.php';
+require_once '../php/europamap.php';
 
 $urls = [
     // UTC +3.00 H (Eastern European Time Zone, Year Round)
@@ -65,9 +65,6 @@ $urls = [
     */
     
 ];
-// Define an array to store latitude and longitude values
-$latitudes = array();
-$longitudes = array();
 
 // Loop through each URL to extract latitude and longitude
 foreach ($urls as $name => $url) {
@@ -84,7 +81,11 @@ foreach ($urls as $name => $url) {
             $longitudes[$name] = $query_params['lng'];
         }
     }
+// Define an array to store latitude and longitude values
+    $latitudes = array();
+    $longitudes = array();
 }
+
 
 // Now $latitudes and $longitudes arrays contain latitude and longitude values for each city
 

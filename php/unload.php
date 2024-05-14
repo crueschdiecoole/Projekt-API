@@ -1,5 +1,5 @@
 <?php
-require_once '../config/config.php'; // Adjust the path as necessary
+require_once '../php/load.php'; // Adjust the path as necessary
 
 try {
     // Connect to the database

@@ -1,5 +1,5 @@
 <?php
-require_once '../php/test.php'; // Adjust the path as necessary
+require_once '../php/load.php'; // Adjust the path as necessary
 
 try {
     // Connect to the database
@@ -13,7 +13,7 @@ try {
 
         // Get data from database
         $stmt = $pdo->prepare("SELECT sunrise, sunset, solar_noon, day_length FROM sunrise_sunset_data WHERE location = :location");
-        $stmt->bindParam(':location', $countryId);   // Assign $countryId to location SQL entry
+        $stmt->bindValue(':location', $countryId);   // Assign $countryId to location SQL entry
         $stmt->execute();
         $sunsetData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

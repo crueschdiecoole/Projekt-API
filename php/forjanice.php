@@ -268,7 +268,7 @@ function handleClick(element) {
             }
         }
     };
-    xhr.open("GET", "test.php?country=" + countryId, true);
+    xhr.open("GET", "xxx.php?country=" + countryId, true);
     xhr.send();
 }
 

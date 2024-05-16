@@ -60,31 +60,58 @@ $urls = [
 ];
 // Check if the country parameter is provided
 
+try {
+    $pdo = new PDO($dsn, $db_user, $db_pass, $options);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+
+// Define the SQL statement for database insertion
+$sql = "INSERT INTO sunrise_sunset_data (sunrise, sunset, solar_noon, day_length, location) 
+        VALUES (:sunrise, :sunset, :solar_noon, :day_length, :location)";
+
 // Check if the country parameter is provided
 if (isset($_GET['country'])) {
     // Get the country ID from the request
     $countryId = $_GET['country'];
 
-    // Query the database to fetch data for the specified country
-    // Your existing code to fetch data from the database
+    // Fetch data from the current URL based on the clicked country
+    $url = $urls[$countryId];
 
-    // Fetch the data as an associative array
-    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Fetch data from the current URL
+    $data = file_get_contents($url);
 
-    // Check if data was found
-    if ($data) {
-        // Return the data as JSON
-        header('Content-Type: application/json');
-        echo json_encode($data);
-        exit; // Ensure no additional content is echoed
+    // Check if data was fetched successfully
+    if ($data !== false) {
+        // Parse the JSON data into an associative array
+        $data_array = json_decode($data, true);
+
+        // Prepare the statement for database insertion
+        $stmt = $pdo->prepare($sql);
+
+        // Extract the relevant data from the $data_array
+        $items = $data_array['results'];
+
+        // Bind values and execute the insertion query
+        $stmt->bindValue(':location', $countryId);
+        $stmt->bindValue(':sunrise', $items['sunrise']);
+        $stmt->bindValue(':sunset', $items['sunset']);
+        $stmt->bindValue(':solar_noon', $items['solar_noon']);
+        $stmt->bindValue(':day_length', $items['day_length']);
+
+        if ($stmt->execute()) {
+            // Output success message if insertion is successful
+            echo "Data for $countryId inserted successfully.";
+        } else {
+            // Output error message if insertion fails
+            echo "Error inserting data for $countryId.";
+        }
     } else {
-        // If no data was found for the specified country, return an error message
-        echo json_encode(['error' => 'No data found for the specified country']);
-        exit; // Ensure no additional content is echoed
+        // Output error message if data fetching fails
+        echo "Error fetching data for $countryId.";
     }
 } else {
-    // If no country parameter is provided, return an error message
-    echo json_encode(['error' => 'No country parameter provided']);
-    exit; // Ensure no additional content is echoed
+    // Output error message if no country parameter is provided
+    echo "No country parameter provided.";
 }
 ?>

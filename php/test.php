@@ -58,14 +58,7 @@ $urls = [
          "London" => "https://api.sunrise-sunset.org/json?lat=51.5085&lng=-0.1257",
     
 ];
-// Start output buffering
-ob_start();
-
-try {
-    $pdo = new PDO($dsn, $db_user, $db_pass, $options);
-} catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
-}
+// Check if the country parameter is provided
 
 // Check if the country parameter is provided
 if (isset($_GET['country'])) {
@@ -73,9 +66,7 @@ if (isset($_GET['country'])) {
     $countryId = $_GET['country'];
 
     // Query the database to fetch data for the specified country
-    $sql = "SELECT * FROM sunrise_sunset_data WHERE location = :country";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([':country' => $countryId]);
+    // Your existing code to fetch data from the database
 
     // Fetch the data as an associative array
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -88,17 +79,12 @@ if (isset($_GET['country'])) {
         exit; // Ensure no additional content is echoed
     } else {
         // If no data was found for the specified country, return an error message
-        header('Content-Type: application/json');
         echo json_encode(['error' => 'No data found for the specified country']);
         exit; // Ensure no additional content is echoed
     }
 } else {
     // If no country parameter is provided, return an error message
-    header('Content-Type: application/json');
     echo json_encode(['error' => 'No country parameter provided']);
     exit; // Ensure no additional content is echoed
 }
-
-// Flush the output buffer
-ob_end_flush();
 ?>

@@ -60,33 +60,31 @@ countries.forEach(function(country) {
 });
 
 // Define a function to handle click events on SVG paths
+// Define a function to handle click events on SVG paths
 function handleClick(countryId) {
     console.log('Clicked on country:', countryId);
 
     // Send an AJAX request to get_data.php with the clicked country's ID
     var xhr = new XMLHttpRequest();
+    var responseData; // Define responseData here
+
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
-                // Parse the JSON response
-                var responseData = JSON.parse(xhr.responseText);
-                
+                // Get the response text directly
+                responseData = xhr.responseText; // Update responseData here
+
                 // Update the HTML content with the received data
                 if (responseData.error) {
                     document.getElementById("dataOutput").innerHTML = "<p>Error: " + responseData.error + "</p>";
                 } else {
-                    // Construct an HTML table to display the data
-                    var tableHTML = "<table>";
-                    tableHTML += "<tr><th>Attribute</th><th>Value</th></tr>";
-                    tableHTML += "<tr><td>Location</td><td>" + responseData.location + "</td></tr>";
-                    tableHTML += "<tr><td>Sunrise</td><td>" + responseData.sunrise + "</td></tr>";
-                    tableHTML += "<tr><td>Sunset</td><td>" + responseData.sunset + "</td></tr>";
-                    tableHTML += "<tr><td>Solar Noon</td><td>" + responseData.solar_noon + "</td></tr>";
-                    tableHTML += "<tr><td>Day Length</td><td>" + responseData.day_length + "</td></tr>";
-                    tableHTML += "</table>";
-
-                    // Set the HTML content to the constructed table
-                    document.getElementById("dataOutput").innerHTML = tableHTML;
+                    document.getElementById("dataOutput").innerHTML = `
+                        <p>Location: ${responseData.location}</p>
+                        <p>Sunrise: ${responseData.sunrise}</p>
+                        <p>Sunset: ${responseData.sunset}</p>
+                        <p>Solar Noon: ${responseData.solar_noon}</p>
+                        <p>Day Length: ${responseData.day_length}</p>
+                    `;
                 }
             } else {
                 console.error('Error fetching data:', xhr.statusText);

@@ -62,35 +62,4 @@ countries.forEach(function(country) {
 // Define a function to handle click events on SVG paths
 function handleClick(countryId) {
     console.log('Clicked on country:', countryId);
-
-    // Send an AJAX request to get_data.php with the clicked country's ID
-    var xhr = new XMLHttpRequest();
-    var responseData;
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                // Parse the JSON response
-                responseData = JSON.parse(xhr.responseText);
-                // Update the HTML content with the received data
-                if (responseData.error) {
-                    document.getElementById("dataOutput").innerHTML = "<p>Error: " + responseData.error + "</p>";
-                } else {
-                    document.getElementById("dataOutput").innerHTML = `
-                        <p>Location: ${responseData.location}</p>
-                        <p>Sunrise: ${responseData.sunrise}</p>
-                        <p>Sunset: ${responseData.sunset}</p>
-                        <p>Solar Noon: ${responseData.solar_noon}</p>
-                        <p>Day Length: ${responseData.day_length}</p>
-                    `;
-                }
-            } else {
-                console.error('Error fetching data:', xhr.statusText);
-            }
-        }
-    };
-
-    // Specify the URL with the country parameter
-    xhr.open("GET", "test.php?country=" + countryId, true);
-    xhr.send();
 }

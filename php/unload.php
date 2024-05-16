@@ -1,3 +1,4 @@
+
 <?php
 require_once '../php/load.php'; // Adjust the path as necessary
 
@@ -10,6 +11,7 @@ try {
     if (isset($_GET['country'])) {
         // Get the country ID from the request
         $countryId = $_GET['country'];
+        echo $countryId;
 
         // Get data from database
         $stmt = $pdo->prepare("SELECT sunrise, sunset, solar_noon, day_length FROM sunrise_sunset_data WHERE location = :location");

@@ -171,52 +171,35 @@ $urls = [
         ],
     
 ];
+
 // Connect to the database
 try {
     $pdo = new PDO($dsn, $db_user, $db_pass, $options);
-   // echo "Connected to the database successfully!";
 } catch (\PDOException $e) {
     throw new \PDOException($e->getMessage(), (int) $e->getCode());
-   // echo "Connection failed";
-};
+}
 
-// Define the SQL statement to select all records from the table
-$sql = "INSERT INTO sunrise_sunset_data (sunrise, sunset, solar_noon, day_length) VALUES (?,?,?,?)";
+foreach ($urls as $location => $data) {
+    $url = $data['url']; // Access the URL from the nested array
+
+    $data = file_get_contents($url);
+    if ($data !== false) {
+        $data_array = json_decode($data, true);
+        if ($data_array['status'] === 'OK') {
+            $results = $data_array['results'];
+            $sunrise = $results['sunrise'];
+            $sunset = $results['sunset'];
+            $solar_noon = $results['solar_noon'];
+            $day_length = $results['day_length'];
+
+            $stmt = $pdo->prepare("INSERT INTO sunrise_sunset_data (location, sunrise, sunset, solar_noon, day_length) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE sunrise=VALUES(sunrise), sunset=VALUES(sunset), solar_noon=VALUES(solar_noon), day_length=VALUES(day_length)");
+            $stmt->execute([$location, $sunrise, $sunset, $solar_noon, $day_length]);
+            
+        }
+    }
+}
 $sql = "SELECT * FROM sunrise_sunset_data";
-
-// Execute the SQL statement
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $results = $stmt->fetchAll();
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sunset Data</title>
-</head>
-<body>
-    <table>
-        <tr>
-            <th>Location</th>
-            <th>Sunrise</th>
-            <th>Sunset</th>
-            <th>Solar Noon</th>
-            <th>Day Length</th>
-        </tr>
-        <?php foreach ($results as $row) : ?>
-            <tr>
-                <td><?= $row['location'] ?></td>
-                <td><?= $row['sunrise'] ?></td>
-                <td><?= $row['sunset'] ?></td>
-                <td><?= $row['solar_noon'] ?></td>
-                <td><?= $row['day_length'] ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
-
-</body>
-</html>

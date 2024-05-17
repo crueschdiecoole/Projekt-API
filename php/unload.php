@@ -1,61 +1,56 @@
-
 <?php
-require_once '../php/load.php'; // Adjust the path as necessary
+// Include the database configuration
+require_once '../config/config.php';
+
+header('Content-Type: application/json');
 
 try {
     // Connect to the database
     $pdo = new PDO($dsn, $db_user, $db_pass, $options);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Check if the country parameter is provided
-    if (isset($_GET['country'])) {
-        // Get the country ID from the request
-        $countryId = $_GET['country'];
-        echo $countryId;
+    // Get the country parameter from the URL
+    $country = isset($_GET['country']) ? $_GET['country'] : '';
 
-        // Get data from database
-        $stmt = $pdo->prepare("SELECT sunrise, sunset, solar_noon, day_length FROM sunrise_sunset_data WHERE location = :location");
-        $stmt->bindValue(':location', $countryId);   // Assign $countryId to location SQL entry
-        $stmt->execute();
-        $sunsetData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if (empty($sunsetData)) {
-            http_response_code(404);
-            echo json_encode(["message" => "No sunsetData found."]);
-            return;
-        };
-
-        // Initialize arrays to save sunsetData
-        $sunrise = [];
-        $sunset = [];
-        $solar_noon = [];
-        $day_length = [];
-
-        // Loop through data and assign to arrays
-        foreach ($sunsetData as $data) {
-            $sunrise[] = (string)$data['sunrise'];
-            $sunset[] = (string)$data['sunset'];
-            $solar_noon[] = (string)$data['solar_noon'];
-            $day_length[] = (string)$data['day_length'];
-        };
-
-        // Prepare array structure
-        $sunsetResult = [
-            "sunrise" => $sunrise,  //Assign $sunrise to JSON entry
-            "sunset" => $sunset,
-            "solar_noon" => $solar_noon,
-            "day_length" => $day_length
-        ];
-
-        // Return JSON response
-        header('Content-Type: application/json');
-        echo json_encode($sunsetResult);
-    } else {
-        // If no country parameter is provided, return an error message
-        echo json_encode(['error' => 'No country parameter provided']);
-        exit; // Ensure no additional content is echoed
+    if (empty($country)) {
+        echo json_encode(['error' => 'Country parameter is required']);
+        exit;
     }
+
+// Prepare the SQL query to fetch the latest data for the specified country
+$stmt = $pdo->prepare("
+    SELECT * 
+    FROM sunrise_sunset_data 
+    WHERE location = :country 
+    ORDER BY timestamp DESC 
+    LIMIT 1
+"); // Adjust column name if necessary
+$stmt->bindParam(':country', $country, PDO::PARAM_STR);
+$stmt->execute();
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Filter out entries without content (this should only be necessary if your data might have incomplete entries even in the latest row)
+$filteredData = array_filter($data, function($entry) {
+    return !empty($entry['sunrise']) && 
+           !empty($entry['location']) && 
+           !empty($entry['sunset']) && 
+           !empty($entry['solar_noon']) && 
+           !empty($entry['day_length']);
+});
+
+    // Encode the filtered array into JSON format
+    $jsonData = json_encode(array_values($filteredData));
+    
+    // Check if json_encode failed
+    if ($jsonData === false) {
+        // If there was an error, return a JSON error message
+        echo json_encode(['error' => 'JSON encoding error: ' . json_last_error_msg()]);
+        exit;
+    }
+
+    // Echo the JSON data
+    echo $jsonData;
 } catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+    // Database connection error
+    echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
 }
 ?>

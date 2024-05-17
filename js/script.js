@@ -11,7 +11,7 @@ async function fetchData() {
         if (contentType && contentType.includes('application/json')) {
             const responseBody = await response.text();
             const data = JSON.parse(responseBody);
-            console.log(data);
+            //console.log(data);
             return data;
         } else {
             throw new Error('Invalid response format');

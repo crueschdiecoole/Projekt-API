@@ -10,3 +10,10 @@ path:hover {
 }
 
 
+#logo {
+    max-height: 10vw;
+    object-fit: cover;  
+    object-position: 50% 50%;
+    transition: transform 0.3s ease;
+    margin-bottom: 60%;
+  }

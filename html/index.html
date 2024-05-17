@@ -4,10 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello World</title>
-    <!-- Include your CSS and JavaScript files here -->
+    <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
-    <h1>Hello, world!</h1>
-    <script src="../js/script.js"></script>
+    
+<div class="slider__container">
+    <div class="slider__input"></div>
+    <input type="range" min="1" max="3" value="1" id="slider" />
+    <div class="slider__label-wrapper">
+        <div class="slider__label">TODAY</div>
+        <div class="slider__label">TOMORROW</div>
+        <div class="slider__label">AFTER TOMORROW</div>
+        <div class="slider"></div>
+    </div>
+</div>
+
+<div class="map-container">
+<svg id="map" viewBox="0 0 1000 600">
+    <!-- Your SVG map content here -->
+
+
+</svg>
+</div>
+<div class="right-column">
+<div class="right-column__icon">
+    <img src="../img/Sonne aufgehend.png" alt="Sunrise">
+</div>
+<div class="right-column__icon">
+    <img src="../img/Zenit.png" alt="Zenit">
+</div>
+<div class="right-column__icon">
+    <img src="../img/Sonne untergehend.png" alt="Sunset">
+</div>
+<div class="right-column__label">MOON</div>
+</div>
+</div>
 </body>
+
 </html>

@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
 
             pathElement.addEventListener("mouseleave", function() {
-                this.style.fill = "none";
+                this.style.fill = "white";
             });
         } else {
             console.error('Element with id ' + country.pathId + ' not found.');

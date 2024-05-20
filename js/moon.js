@@ -61,5 +61,4 @@ const moon_PHASES = {
   
   // Update the content of the HTML elements
   moonPhaseElement.alt = phase; // Set alt attribute for accessibility
-  moonAgeElement.innerText = "moon Age: " + age.toFixed(2) + " days";
   

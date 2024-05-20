@@ -1,6 +1,6 @@
 async function fetchData() {
     try {
-        const response = await fetch('https://520260-4.web.fhgr.ch/php/load.php');
+        const response = await fetch('https://520260-4.web.fhgr.ch/php/unload.php');
         console.log(response); // Log the response object
         
         if (!response.ok) {

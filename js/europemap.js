@@ -63,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     async function handleClick(countryId) {
         console.log('Clicked on country:', countryId);
-
         try {
             let response = await fetch(`https://520260-4.web.fhgr.ch/php/unload.php?country=${countryId}`);
             console.log('Fetch response:', response);
@@ -74,28 +73,16 @@ document.addEventListener("DOMContentLoaded", function() {
             if (data.error) {
                 console.error(data.error);
             } else {
-                var sunrise = data.sunrise;
-                var sunset = data.sunset;
-                var solarNoon = data.solar_noon;
-                var dayLength = data.day_length;
+                var sunrise = data[0].sunrise;
+                var sunset = data[0].sunset;
+                var solarNoon = data[0].solar_noon;
 
-                // Additional logging to verify each property
-                console.log('Sunrise:', sunrise);
-                console.log('Sunset:', sunset);
-                console.log('Solar Noon:', solarNoon);
-                console.log('Day Length:', dayLength);
+                // Populate data into HTML elements
+                document.getElementById("sunriseData").textContent = sunrise;
+                document.getElementById("solarNoonData").textContent = solarNoon;
+                document.getElementById("sunsetData").textContent = sunset;
 
-                var outputElement = document.getElementById("dataOutput");
-                if (outputElement) {
-                    outputElement.innerHTML =
-                        `<p>Sunrise: ${sunrise}</p>
-                         <p>Sunset: ${sunset}</p>
-                         <p>Solar Noon: ${solarNoon}</p>
-                         <p>Day Length: ${dayLength}</p>`;
-                    console.log('Data displayed in output element.');
-                } else {
-                    console.error('Output element with id "dataOutput" not found.');
-                }
+                console.log('Data displayed in output elements.');
             }
         } catch (error) {
             console.error('Error fetching data:', error);

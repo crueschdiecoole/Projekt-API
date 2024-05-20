@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>MoonTrim</title>
     <link rel="stylesheet" href="../css/style.css">
-    <script src="../html/europemap.html"></script>
 </head>
 
 <body>
     <div class="mainlogo">
-        <img src="../img/LOGO MoonTrim.png" alt="Logo" >   
+        <img src="../img/LOGOMoonTrim.png" alt="Logo" >   
     </div>
 <div class="slider__container">
 
@@ -140,21 +139,44 @@
     </svg>
 </div>
 
-
+<div id="dataOutput"></div>
 <div class="right-column">
-<div class="right-column__icon">
-    <img src="../img/Sonne aufgehend.png" alt="Sunrise">
+    <div class="right-column__icon" id="sunriseIcon">
+        <img src="../img/Sonne aufgehend.png" alt="Sunrise">
+        <p>Sunrise: <span id="sunriseData"></span></p>
+    </div>
+    <div class="right-column__icon" id="solarNoonIcon">
+        <img src="../img/Zenit.png" alt="Zenit">
+        <p>Solar Noon: <span id="solarNoonData"></span></p>
+    </div>
+    <div class="right-column__icon" id="sunsetIcon">
+        <img src="../img/Sonne untergehend.png" alt="Sunset">
+        <p>Sunset: <span id="sunsetData"></span></p>
+    </div>
+    <div class="right-column__label">MOON</div>
+    <!-- Moon Phase Images -->
+    <img id="new-moon" class="moon-image" src="../img/Mond neu.png" alt="New Moon">
+    <img id="full-moon" class="moon-image" src="../img/Mond neu.png" alt="Full Moon">
+    <img id="sichel-moon" class="moon-image" src="../img/Mond Sichel.png" alt="Sichel Moon">
+    <img id="half-moon" class="moon-image" src="../img/Mond halb.png" alt="Half Moon">
+<!-- Add more moon phase images as needed -->
+
+<!-- Pop-up Message -->
+    <div id="popup" style="display: none;">
+         <p>This is a pop-up message!</p>
+        <img src="../img/haarspray.png" alt="haarspray">
+    </div>
+    <div id="popup" style="display: none;">
+        <p>This is a pop-up message!</p>
+       <img src="../img/kamm.png" alt="kamm">
+   </div>
+   <div id="popup" style="display: none;">
+    <p>This is a pop-up message!</p>
+   <img src="../img/schere.png" alt="schere">
 </div>
-<div class="right-column__icon">
-    <img src="../img/Zenit.png" alt="Zenit">
 </div>
-<div class="right-column__icon">
-    <img src="../img/Sonne untergehend.png" alt="Sunset">
-</div>
-<div class="right-column__label">MOON</div>
-</div>
-</div>
-<script src="../js/script.js" defer></script>
+
+<script src="../js/script.js" ></script>
 <script src="../js/europemap.js"></script>
 </body>
 

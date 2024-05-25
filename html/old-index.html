@@ -1,18 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="en">    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MoonTrim</title>
-    <link rel="stylesheet" href="../css/style.css" />
-  </head>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
 
 <body>
     <div class="mainlogo">
-        <a href="team.html" target="_blank">
-            <img src="../img/LOGOMoonTrim.png" alt="Logo">
-        </a>
+        <img src="../img/LOGOMoonTrim.png" alt="Logo" >   
     </div>
+<div class="slider__container">
+
+    <div class="slider__input"></div>
+    <input type="range" min="1" max="3" value="1" id="slider" />
+    <div class="slider__label-wrapper">
+        <div class="slider__label">TODAY</div>
+        <div class="slider__label">TOMORROW</div>
+        <div class="slider__label">AFTER TOMORROW</div>
+        <div class="slider"></div>
     </div>
 </div>
 
@@ -147,14 +154,24 @@
         <p>Sunset: <span id="sunsetData"></span></p>
     </div>
     <div id="moonPhase">
-        <img id="moon_PHASES" alt="Moon Phase">
+        <img id="moonPhaseImg" alt="Moon Phase">
     </div>
-<!-- Add more moon phase images here -->
+    <div id="moonAge"></div>
+    <!-- Moon Phase Images -->
+<!-- Add more moon phase images as needed -->
 
 <!-- Pop-up Message -->
-<div id="popup">
-    <p id="popup-text"></p>
-    <img id="popup-img" alt="Popup Image">
+    <div id="popup" style="display: none;">
+         <p>This is a pop-up message!</p>
+        <img src="../img/haarspray.png" alt="haarspray">
+    </div>
+    <div id="popup" style="display: none;">
+        <p>This is a pop-up message!</p>
+       <img src="../img/kamm.png" alt="kamm">
+   </div>
+   <div id="popup" style="display: none;">
+    <p>This is a pop-up message!</p>
+   <img src="../img/schere.png" alt="schere">
 </div>
 </div>
 </div>

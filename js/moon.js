@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", function() {
   const moon_PHASES = {
-      "Mond neu": "img/Mond neu.png",
-      "Mond Sichel": "img/Mond Sichel.png",
-      "Mond halb": "img/Mond halb.png",
-      "Mond voll": "img/Mond voll.png",
+      "Mond neu": "../img/MondNeu.png",
+      "Mond Sichel": "../img/MondSichel.png",
+      "Mond halb": "../img/MondHalb.png",
+      "Mond voll": "../img/MondVoll.png",
   };
 
   const getJulianDate = (date = new Date()) => {

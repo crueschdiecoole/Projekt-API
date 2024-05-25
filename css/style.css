@@ -204,3 +204,27 @@ body, html {
     transition: transform 0.3s ease;
     margin-bottom: 60%;
   }
+
+  /*Popup*/
+  #popup {
+    display: none;
+    position: fixed;
+    top: 15%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    background-color: lightblue;
+    padding: 20px;
+    border: 2px solid black;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+#popup img {
+    max-width: 100%;
+    width: 50%;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+

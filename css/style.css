@@ -348,22 +348,22 @@ body {
     padding: 0;
 }
 .team-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 80%;
-    margin-top: 50px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 80%;
+  margin-top: 50px;
 }
 .team-member {
-    text-align: center;
+  text-align: center;
 }
 .team-member img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 .team-member p {
-    margin-top: 10px;
-    font-size: 1.2em;
+  margin-top: 10px;
+  font-size: 1.2em;
 }

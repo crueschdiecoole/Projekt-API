@@ -191,7 +191,8 @@ path:hover {
   height: 150px;
   border-radius: 50%;
   object-fit: cover;
-  paddin
+  margin-left: 20px;
+  margin-right: 20px;
 }
 .team-member p {
   margin-top: 10px;
